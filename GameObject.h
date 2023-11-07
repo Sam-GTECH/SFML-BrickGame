@@ -7,6 +7,7 @@ namespace sf
 }
 
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class GameObject
 {
@@ -21,8 +22,14 @@ class GameObject
 		GameObject(float x, float y, sf::Color color, float r);
 
 		//update();
-		//draw(sf::RenderWindow win);
+		void update(float deltaTime);
+		void setVector(float x, float y);
+		sf::Vector2f getPos();
+		void draw(sf::RenderWindow& win);
+		void collide(std::string side);
+		//void setColor(float x, float y);
 
 	private:
 		sf::Shape* shape;
+		sf::Vector2f speedVect;
 };

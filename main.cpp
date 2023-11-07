@@ -1,28 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
 
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
 int main(int argc, char** argv)
 {
+    sf::Clock deltaClock;
+    float deltaTime = deltaClock.restart().asSeconds();
+
     //Création d'une fenêtre
-    sf::RenderWindow oWindow(sf::VideoMode(640, 480), "SFML");
+    sf::RenderWindow oWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML");
 
-    /*//Création d'un cercle de radius 100
-    sf::CircleShape oCircle(100.f);
-    //A la position 0, 0
-    oCircle.setPosition(0.f, 0.f);
-    //Et de couleur verte
-    oCircle.setFillColor(sf::Color::Magenta);
-
-
-
-    //Création d'un rectangle de taille 50, 50
-    sf::RectangleShape oRectangle(sf::Vector2f(50.f, 50.f));
-    //A la position 100, 100
-    oCircle.setPosition(100.f, 100.f);
-    //Et de couleur rouge
-    oRectangle.setFillColor(sf::Color::Blue);*/
-
-    GameObject* obj = new GameObject(0, 0, sf::Color::Blue, 50.f, 60.f);
+    GameObject* obj = new GameObject(50.f, 50.f, sf::Color::Blue, 50.f, 60.f);
+    obj->setVector(1, -1);
 
     //GameLoop
     while (oWindow.isOpen())
@@ -36,14 +27,35 @@ int main(int argc, char** argv)
         }
 
         //UPDATE
+        obj->update(deltaTime);
+        sf::Vector2f curPos = obj->getPos();
+        printf("%f\n", curPos.y);
+        if (curPos.y < 0)
+        {
+            obj->collide("up");
+        }
+        if (curPos.y > SCREEN_HEIGHT)
+        {
+            obj->collide("down");
+        }
+        if (curPos.x < 0)
+        {
+            obj->collide("left");
+        }
+        if (curPos.x > SCREEN_WIDTH)
+        {
+            obj->collide("right");
+        }
 
         //DRAW
         oWindow.clear();
+        obj->draw(oWindow);
 
         //oWindow.draw(oCircle);
         //oWindow.draw(oRectangle);
 
         oWindow.display();
+        deltaTime = deltaClock.restart().asSeconds();
     }
 
     return 0;
