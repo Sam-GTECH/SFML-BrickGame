@@ -20,10 +20,13 @@ int main(int argc, char** argv)
     bool show_fps = font.loadFromFile("arial.ttf");
 
     sf::Text text;
-    text.setFont(font);
-    text.setString("FPS: 0");
-    text.setCharacterSize(16);
-    text.setFillColor(sf::Color::White);
+    if (show_fps)
+    {
+        text.setFont(font);
+        text.setString("FPS: 0");
+        text.setCharacterSize(16);
+        text.setFillColor(sf::Color::White);
+    }
 
     std::vector<GameObject*> objects;
     GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
@@ -51,16 +54,19 @@ int main(int argc, char** argv)
         }
 
         //UPDATE
-        fpsTimer += deltaTime;
-        fpsCount += 1.f;
-        if (fpsTimer >= 1.f)
+        if (show_fps)
         {
-            FPS = static_cast<float>(fpsCount) / fpsTimer;
-            fpsCount = 0;
-            fpsTimer -= 1.f;
+            fpsTimer += deltaTime;
+            fpsCount += 1.f;
+            if (fpsTimer >= 1.f)
+            {
+                FPS = static_cast<float>(fpsCount) / fpsTimer;
+                fpsCount = 0;
+                fpsTimer -= 1.f;
 
-            snprintf(fpsText, sizeof(fpsText), "FPS: %i", FPS);
-            text.setString(fpsText);
+                snprintf(fpsText, sizeof(fpsText), "FPS: %i", FPS);
+                text.setString(fpsText);
+            }
         }
 
         //DRAW
