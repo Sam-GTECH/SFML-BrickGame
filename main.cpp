@@ -22,7 +22,7 @@ int main(int argc, char** argv)
     //Et de couleur rouge
     oRectangle.setFillColor(sf::Color::Blue);*/
 
-    GameObject* obj = new GameObject(10.f, 10.f, sf::Color::Blue, 50.f, 60.f);
+    GameObject* obj = new GameObject(0, 0, sf::Color::Blue, 50.f, 60.f);
 
     //GameLoop
     while (oWindow.isOpen())
