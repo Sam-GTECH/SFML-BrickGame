@@ -24,3 +24,8 @@ GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
 
     shape = oRectangle;
 }
+
+void GameObject::draw(sf::RenderWindow& win)
+{
+    win.draw(*shape);
+}

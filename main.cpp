@@ -42,6 +42,7 @@ int main(int argc, char** argv)
 
         //oWindow.draw(oCircle);
         //oWindow.draw(oRectangle);
+        obj->draw(oWindow);
 
         oWindow.display();
     }
