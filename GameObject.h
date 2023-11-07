@@ -12,8 +12,8 @@ class GameObject
 {
 	public:
 
-		float x;
-		float y;
+		float x = 1;
+		float y = 1;
 		float width = 1;
 		float height = 1;
 
