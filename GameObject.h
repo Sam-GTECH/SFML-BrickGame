@@ -29,7 +29,7 @@ class GameObject
 
 		float getRotation();
 
-		//update();
+		void update();
 		void draw(sf::RenderWindow& win);
 
 	private:

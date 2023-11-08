@@ -71,6 +71,11 @@ float GameObject::getRotation()
 
 //////////////////////////// GAME EVENTS
 
+void GameObject::update()
+{
+
+}
+
 void GameObject::draw(sf::RenderWindow& win)
 {
     win.draw(*shape);
