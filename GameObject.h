@@ -12,12 +12,6 @@ namespace sf
 class GameObject
 {
 	public:
-
-		float x = 1;
-		float y = 1;
-		float width = 1;
-		float height = 1;
-
 		GameObject(float x, float y, sf::Color color, float w, float h);
 		GameObject(float x, float y, sf::Color color, float r);
 		~GameObject();
@@ -28,10 +22,25 @@ class GameObject
 		void setOrigin(float o_x, float o_y);
 
 		float getRotation();
-
-		void update();
+  
+		//update();
+		void update(float deltaTime);
+		void setVector(float x, float y);
+		sf::Vector2f getPos();
+		sf::Vector2f getSize();
 		void draw(sf::RenderWindow& win);
+		bool rectOverlap(GameObject object);
+		bool enterColision(GameObject object);
+		void exitColision(GameObject object);
+		void collide(std::string side);
 
 	private:
+		float x = 1;
+		float y = 1;
+		float width = 1;
+		float height = 1;
+		bool colision = false;
+		int moveSpeed;
 		sf::Shape* shape;
+		sf::Vector2f speedVect;
 };
