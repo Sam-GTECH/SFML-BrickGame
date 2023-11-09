@@ -87,7 +87,7 @@ void GameManager::update()
 {
 	for (int i = 0; i < objects.size(); i++)
 	{
-		objects[i]->update();
+		objects[i]->update(deltaTime);
 	}
 
 	if (show_fps)

@@ -109,11 +109,6 @@ sf::Vector2f GameObject::getSize()
     return sf::Vector2f(width, height);
 }
 
-void GameObject::draw(sf::RenderWindow& win)
-{
-    win.draw(*shape);
-}
-
 bool GameObject::rectOverlap(GameObject object)
 {
     sf::Vector2f curPos = shape->getPosition();
