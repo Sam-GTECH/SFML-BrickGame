@@ -23,9 +23,11 @@ GameManager::GameManager(int limit, bool vsync)
 	//Input.game = this;
 
 	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
-	GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
-	objects.push_back(obj);
-	objects.push_back(obj2);
+	obj->setVector(1, 0);
+	GameObject* obj2 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
+	//GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
+	bullets.push_back(obj);
+	blocks.push_back(obj2);
 
 	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
@@ -47,10 +49,20 @@ GameManager::GameManager(int limit, bool vsync)
 GameManager::~GameManager()
 {
 	window.~RenderWindow();
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < blocks.size(); i++)
 	{
-		delete objects[i];
+		delete blocks[i];
 	}
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		delete bullets[i];
+	}
+}
+
+bool GameManager::rectOverlap(GameObject& object1, GameObject& object2)
+{
+	return object1.x < object2.x + object2.width && object1.x + object1.width > object2.x && object1.y < object2.y + object2.height && object1.y + object1.height > object2.y;
 }
 
 void GameManager::gameLoop()
@@ -85,10 +97,18 @@ void GameManager::gameLoop()
 
 void GameManager::update()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < blocks.size(); i++)
 	{
-		objects[i]->update(deltaTime);
+		blocks[i]->update(deltaTime);
 	}
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		bullets[i]->update(deltaTime);
+	}
+
+	if (rectOverlap(*bullets[0], *blocks[0]))
+		bullets[0]->collide("right");
 
 	if (show_fps)
 	{
@@ -108,9 +128,14 @@ void GameManager::update()
 
 void GameManager::draw()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < blocks.size(); i++)
 	{
-		objects[i]->draw(window);
+		blocks[i]->draw(window);
+	}
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		bullets[i]->draw(window);
 	}
 
 	window.draw(text);

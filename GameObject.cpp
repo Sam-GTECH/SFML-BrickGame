@@ -90,7 +90,11 @@ void GameObject::draw(sf::RenderWindow& win)
 void GameObject::update( float deltaTime)
 {
     const sf::Vector2f* curPosition = &shape->getPosition();
-    shape->setPosition(curPosition->x + speedVect.x * deltaTime * moveSpeed, curPosition->y + speedVect.y * deltaTime * moveSpeed);
+    float newPosX = curPosition->x + speedVect.x * deltaTime * moveSpeed;
+    float newPosY = curPosition->y + speedVect.y * deltaTime * moveSpeed;
+    x = newPosX;
+    y = newPosY;
+    shape->setPosition(newPosX, newPosY);
 }
 
 void GameObject::setVector(float x, float y)
@@ -109,22 +113,16 @@ sf::Vector2f GameObject::getSize()
     return sf::Vector2f(width, height);
 }
 
-bool GameObject::rectOverlap(GameObject object)
-{
-    sf::Vector2f curPos = shape->getPosition();
-    colision = curPos.x < object.x + object.width && curPos.x + width > object.x && curPos.y < object.y + object.height && curPos.y + height > object.y;
-    return colision;
-}
-
 bool GameObject::enterColision(GameObject object)
 {
-    return colision ? rectOverlap(object) : false;
+    //return colision ? rectOverlap(object) : false;
+    return false;
 }
 
 void GameObject::exitColision(GameObject object)
 {
-    if (colision)
-        colision = rectOverlap(object);
+    //if (colision)
+    //    colision = rectOverlap(object);
 }
 
 void GameObject::collide(std::string side)
