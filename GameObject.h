@@ -14,7 +14,15 @@ class GameObject
 	public:
 		GameObject(float x, float y, sf::Color color, float w, float h);
 		GameObject(float x, float y, sf::Color color, float r);
+		~GameObject();
 
+		void setPosition(float x, float y);
+		void setColor(sf::Color color);
+		void setRotation(float deg);
+		void setOrigin(float o_x, float o_y);
+
+		float getRotation();
+  
 		//update();
 		void update(float deltaTime);
 		void setVector(float x, float y);

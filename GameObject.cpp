@@ -5,35 +5,86 @@
 
 GameObject::GameObject(float x, float y, sf::Color color, float r)
 {
-    //Création d'un cercle de radius r
     sf::CircleShape* oCircle = new sf::CircleShape(r);
-    //A la position x, y
     oCircle->setPosition(x, y);
-    //Et de couleur color
     oCircle->setFillColor(color);
     //Avec un vecteur vitesse de 0
     speedVect.x = 0;
     speedVect.y = 0;
     moveSpeed = 100;
 
+    oCircle->setOrigin(sf::Vector2f(.5f * (r * 2), .5f * (r * 2)));
+
     shape = oCircle;
+
+    x = x;
+    y = y;
+    width = r*2;
+    height = r*2;
 }
 
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
     :width(w), height(h)
 {
-    //Création d'un rectangle de taille 50, 50
     sf::RectangleShape* oRectangle = new sf::RectangleShape(sf::Vector2f(w, h));
-    //A la position 100, 100
     oRectangle->setPosition(x, y);
-    //Et de couleur rouge
     oRectangle->setFillColor(color);
     //Avec un vecteur vitesse de 0
     speedVect.x = 0;
     speedVect.y = 0;
     moveSpeed = 100;
 
+    oRectangle->setOrigin(sf::Vector2f(.5f*w, .5f*h));
+
     shape = oRectangle;
+
+    x = x;
+    y = y;
+    width = w;
+    height = h;
+}
+
+GameObject::~GameObject()
+{
+    delete shape;
+}
+
+///////////////////////// SETTERS
+
+void GameObject::setPosition(float x, float y)
+{
+    shape->setPosition(x, y);
+}
+
+void GameObject::setColor(sf::Color color)
+{
+    shape->setFillColor(color);
+}
+
+void GameObject::setRotation(float deg)
+{
+    shape->setRotation(deg);
+}
+
+// \param o_x origin point for X (0-1)
+// \param o_y origin point for Y (0-1)
+void GameObject::setOrigin(float o_x, float o_y)
+{
+    shape->setOrigin(o_x*width, o_y*height);
+}
+
+///////////////////////// GETTERS
+
+float GameObject::getRotation()
+{
+    return shape->getRotation();
+}
+
+//////////////////////////// GAME EVENTS
+
+void GameObject::draw(sf::RenderWindow& win)
+{
+    win.draw(*shape);
 }
 
 void GameObject::update( float deltaTime)
