@@ -24,13 +24,14 @@ class GameObject
 		bool rectOverlap(GameObject object);
 		bool enterColision(GameObject object);
 		void exitColision(GameObject object);
+		void collide(std::string side);
 
 	private:
 		float x = 1;
 		float y = 1;
 		float width = 1;
 		float height = 1;
-		bool colision;
+		bool colision = false;
 		int moveSpeed;
 		sf::Shape* shape;
 		sf::Vector2f speedVect;

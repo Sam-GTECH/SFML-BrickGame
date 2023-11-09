@@ -66,8 +66,8 @@ void GameObject::draw(sf::RenderWindow& win)
 bool GameObject::rectOverlap(GameObject object)
 {
     sf::Vector2f curPos = shape->getPosition();
-    colision = true;
-    return curPos.x < object.x + object.width && curPos.x + width > object.x&& curPos.y < object.y + object.height && curPos.y + height > object.y;
+    colision = curPos.x < object.x + object.width && curPos.x + width > object.x && curPos.y < object.y + object.height && curPos.y + height > object.y;
+    return colision;
 }
 
 bool GameObject::enterColision(GameObject object)
@@ -79,4 +79,16 @@ void GameObject::exitColision(GameObject object)
 {
     if (colision)
         colision = rectOverlap(object);
+}
+
+void GameObject::collide(std::string side)
+{
+    if (side == "up")
+        speedVect.y = 1;
+    else if (side == "down")
+        speedVect.y = -1;
+    else if (side == "left")
+        speedVect.x = 1;
+    else if (side == "right")
+        speedVect.x = -1;
 }
