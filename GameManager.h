@@ -7,9 +7,9 @@
 
 class GameObject;
 
-namespace sf {
-	class Vector2i;
-}
+//namespace sf {
+//	class Vector2i;
+//}
 
 class GameManager
 {

@@ -10,10 +10,8 @@ GameManager::GameManager(int limit, bool vsync)
 	window.setFramerateLimit(limit);
 	window.setVerticalSyncEnabled(vsync);
 
-	sf::Font font;
 	show_fps = font.loadFromFile("arial.ttf");
 
-	sf::Text text;
 	if (show_fps)
 	{
 		text.setFont(font);
@@ -29,8 +27,21 @@ GameManager::GameManager(int limit, bool vsync)
 	objects.push_back(obj);
 	objects.push_back(obj2);
 
-	Input.addInputEvent(sf::Event::MouseButtonPressed, []() -> bool {cout << "olee chitte" << endl; return true; });
-	Input.addInputEvent(sf::Event::MouseButtonPressed, []() -> bool {cout << "olee chitte 2.0" << endl; return false; });
+	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {
+		cout << "olee chitte" << endl;
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			cout << "el rightto" << endl;
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			cout << "el leftto" << endl;
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+			cout << "ur mid" << endl;
+		/*else if (event.mouseButton.button == sf::Mouse::XButton1)
+			cout << "Gamer Mouse 1" << endl;
+		else if (event.mouseButton.button == sf::Mouse::XButton2)
+			cout << "Gamer Mouse 2" << endl;*/
+		return true;
+	});
+	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {cout << "olee chitte 2.0" << endl; return false; });
 }
 
 GameManager::~GameManager()
@@ -74,10 +85,11 @@ void GameManager::gameLoop()
 
 void GameManager::update()
 {
-	sf::Vector2i m = Input.getMousePos();
-	cout << m.x << " - " << m.y << endl;
-	sf::Vector2i p = window.getPosition();
-	cout << p.x << " - " << p.y << endl;
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->update();
+	}
+
 	if (show_fps)
 	{
 		fpsTimer += deltaTime;
@@ -92,7 +104,6 @@ void GameManager::update()
 			text.setString(fpsText);
 		}
 	}
-	cout << "--------------------" << endl;
 }
 
 void GameManager::draw()
