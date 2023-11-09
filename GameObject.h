@@ -12,8 +12,14 @@ namespace sf
 class GameObject
 {
 	public:
+		float x = 1;
+		float y = 1;
+		float width = 1;
+		float height = 1;
+
 		GameObject(float x, float y, sf::Color color, float w, float h);
 		GameObject(float x, float y, sf::Color color, float r);
+		GameObject();
 		~GameObject();
 
 		void setPosition(float x, float y);
@@ -35,10 +41,6 @@ class GameObject
 		void collide(std::string side);
 
 	private:
-		float x = 1;
-		float y = 1;
-		float width = 1;
-		float height = 1;
 		bool colision = false;
 		int moveSpeed;
 		sf::Shape* shape;

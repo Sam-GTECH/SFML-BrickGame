@@ -43,6 +43,7 @@ GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
     width = w;
     height = h;
 }
+GameObject::GameObject() {}
 
 GameObject::~GameObject()
 {

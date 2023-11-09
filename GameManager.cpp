@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GameObject.h"
+#include "Canon.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 using namespace std;
@@ -24,8 +25,13 @@ GameManager::GameManager(int limit, bool vsync)
 
 	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
 	GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
+	Canon* caac = new Canon(640 / 2, 400, sf::Color::Cyan, 100.f, 50.f);
 	objects.push_back(obj);
 	objects.push_back(obj2);
+	objects.push_back(caac);
+
+	caac->input = &Input;
+	caac->game = this;
 
 	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
