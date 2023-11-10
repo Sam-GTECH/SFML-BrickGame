@@ -35,7 +35,8 @@ class GameObject
 		void draw(sf::RenderWindow& win);
 		bool enterColision(GameObject object);
 		void exitColision(GameObject object);
-		void collide(std::string side);
+		void changeDirection(std::string side);
+		void collided(GameObject& object);
 
 	private:
 		bool colision = false;

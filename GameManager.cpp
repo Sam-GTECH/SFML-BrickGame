@@ -108,7 +108,7 @@ void GameManager::update()
 	}
 
 	if (rectOverlap(*bullets[0], *blocks[0]))
-		bullets[0]->collide("right");
+		bullets[0]->changeDirection("left");
 
 	if (show_fps)
 	{
