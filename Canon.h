@@ -9,9 +9,7 @@ class Canon : public GameObject
 {
 	public:
 		Canon(float x, float y, sf::Color color, float w, float h);
+		void postInit() override;
 
-		void update(float dt);
-
-		GameManager* game;
-		InputManager* input;
+		void update(float dt) override;
 };

@@ -50,6 +50,8 @@ GameObject::~GameObject()
     delete shape;
 }
 
+void GameObject::postInit() {}
+
 ///////////////////////// SETTERS
 
 void GameObject::setPosition(float x, float y)

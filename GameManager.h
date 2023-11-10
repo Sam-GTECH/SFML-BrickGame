@@ -36,6 +36,7 @@ class GameManager
 		~GameManager();
 
 		void gameLoop();
+		void addChild(GameObject* obj);
 
 	private:
 		void update();
