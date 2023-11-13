@@ -83,6 +83,11 @@ float GameObject::getRotation()
     return shape->getRotation();
 }
 
+sf::Vector2f GameObject::getOrigin()
+{
+    return shape->getOrigin();
+}
+
 //////////////////////////// GAME EVENTS
 
 void GameObject::draw(sf::RenderWindow& win)

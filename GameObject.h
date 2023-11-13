@@ -41,6 +41,7 @@ class GameObject
 		void setVector(float x, float y);
 		sf::Vector2f getPos();
 		sf::Vector2f getSize();
+		sf::Vector2f getOrigin();
 		void draw(sf::RenderWindow& win);
 		bool rectOverlap(GameObject object);
 		bool enterColision(GameObject object);
