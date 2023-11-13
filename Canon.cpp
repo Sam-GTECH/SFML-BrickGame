@@ -13,6 +13,14 @@ void Canon::postInit()
 {
 	Input->addInputEvent(this, sf::Event::MouseButtonPressed, [](GameObject* obj, sf::Event::EventType event) -> bool {
 		cout << "SHOOT THE TURTLE AND PUT HIM IN THE RHUM!!" << endl;
+		obj->setColor(sf::Color::White);
+		sf::Vector2f pos = obj->getPos();
+		float rot = obj->getRotation() * ((atan(1) * 4) / 180);
+		float x = pos.x + obj->width/2 * cos(rot);
+		float y = pos.y + (obj->height) * sin(rot);
+		GameObject* ball = new GameObject(x, y, sf::Color::Red, 10);
+		ball->setVector(cos(rot), sin(rot));
+		obj->Game->addChild(ball);
 		return true;
 	});
 }
