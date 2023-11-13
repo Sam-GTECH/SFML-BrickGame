@@ -33,13 +33,13 @@ class GameObject
 		sf::Vector2f getPos();
 		sf::Vector2f getSize();
 		void draw(sf::RenderWindow& win);
-		bool enterColision(GameObject object);
-		void exitColision(GameObject object);
+		void enterCollision();
+		void exitCollision();
 		void changeDirection(std::string side);
 		void collided(GameObject& object);
 
 	private:
-		bool colision = false;
+		bool collision = false;
 		int moveSpeed;
 		sf::Shape* shape;
 		sf::Vector2f speedVect;

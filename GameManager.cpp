@@ -4,6 +4,9 @@
 #include <iostream>
 using namespace std;
 
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
 GameManager::GameManager(int limit, bool vsync)
 {
 	window.create(sf::VideoMode(640, 480), "SFML", sf::Style::Close);
@@ -23,7 +26,7 @@ GameManager::GameManager(int limit, bool vsync)
 	//Input.game = this;
 
 	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
-	obj->setVector(1, 0);
+	obj->setVector(1, 1);
 	GameObject* obj2 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
 	//GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
 	bullets.push_back(obj);
@@ -105,11 +108,27 @@ void GameManager::update()
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		bullets[i]->update(deltaTime);
+		if (bullets[i]->x < 0)
+			bullets[i]->changeDirection("right");
+		if (bullets[i]->x + bullets[i]->width > SCREEN_WIDTH)
+			bullets[i]->changeDirection("left");
+		if (bullets[i]->y < 0)
+			bullets[i]->changeDirection("down");
+		if (bullets[i]->y + bullets[i]->height > SCREEN_HEIGHT)
+			bullets[i]->changeDirection("up");
 	}
 
 	if (rectOverlap(*bullets[0], *blocks[0]))
-		bullets[0]->changeDirection("left");
-
+	{
+		bullets[0]->collided(*blocks[0]);
+		bullets[0]->enterCollision();
+	}
+	else
+	{
+		bullets[0]->exitCollision();
+	}
+	
+	// only used to display FPS.
 	if (show_fps)
 	{
 		fpsTimer += deltaTime;

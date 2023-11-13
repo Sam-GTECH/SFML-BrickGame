@@ -114,16 +114,14 @@ sf::Vector2f GameObject::getSize()
     return sf::Vector2f(width, height);
 }
 
-bool GameObject::enterColision(GameObject object)
+void GameObject::enterCollision()
 {
-    //return colision ? rectOverlap(object) : false;
-    return false;
+    collision = true;
 }
 
-void GameObject::exitColision(GameObject object)
+void GameObject::exitCollision()
 {
-    //if (colision)
-    //    colision = rectOverlap(object);
+    collision = false;
 }
 
 void GameObject::changeDirection(std::string side)
@@ -140,6 +138,10 @@ void GameObject::changeDirection(std::string side)
 
 void GameObject::collided(GameObject& object)
 {
+    if (collision)
+    {
+        return;
+    }
     // Most of this stuff would probably be good to keep stored inside the player
     // along side their x and y position. That way it doesn't have to be recalculated
     // every collision check
@@ -170,19 +172,19 @@ void GameObject::collided(GameObject& object)
         if (abs(depthX) < abs(depthY)) {
             // Collision along the X axis. React accordingly
             if (depthX > 0) {
-                // Left side collision
+                changeDirection("right");
             }
             else {
-                // Right side collision
+                changeDirection("left");
             }
         }
         else {
             // Collision along the Y axis.
             if (depthY > 0) {
-                // Top side collision
+                changeDirection("down");
             }
             else {
-                // Bottom side collision
+                changeDirection("up");
             }
         }
     }
