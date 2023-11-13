@@ -11,7 +11,7 @@ Canon::Canon(float x, float y, sf::Color color, float w, float h) : GameObject(x
 
 void Canon::postInit()
 {
-	Input->addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {
+	Input->addInputEvent(this, sf::Event::MouseButtonPressed, [](GameObject* obj, sf::Event::EventType event) -> bool {
 		cout << "SHOOT THE TURTLE AND PUT HIM IN THE RHUM!!" << endl;
 		return true;
 	});

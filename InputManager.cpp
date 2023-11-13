@@ -5,19 +5,36 @@ using namespace std;
 
 InputManager::InputManager() {}
 
-void InputManager::addInputEvent(sf::Event::EventType event, bool (*func)(sf::Event::EventType event))
+void InputManager::addInputEvent(GameManager* obj, sf::Event::EventType event, bool (*func)(GameManager* game, sf::Event::EventType event))
 {
-	callbacks[event].push_back(func);
+	game_callbacks[event].push_back(func);
+}
+
+void InputManager::addInputEvent(GameObject* obj, sf::Event::EventType event, bool (*func)(GameObject* obj, sf::Event::EventType event))
+{
+	obj_callbacks[event].push_back(func);
+	objects_id.push_back(obj);
 }
 
 void InputManager::handleEvents(sf::Event event)
 {
-	if (callbacks[event.type].size() > 0)
+	if (game_callbacks[event.type].size() > 0)
 	{
-		for (int i = 0; i < callbacks[event.type].size(); i++)
+		for (int i = 0; i < game_callbacks[event.type].size(); i++)
 		{
-			if (!callbacks[event.type][i](event.type))
-				callbacks[event.type].erase(callbacks[event.type].begin() + i);
+			if (!game_callbacks[event.type][i](game, event.type))
+				game_callbacks[event.type].erase(game_callbacks[event.type].begin() + i);
+		}
+	}
+	if (obj_callbacks[event.type].size() > 0)
+	{
+		for (int i = 0; i < obj_callbacks[event.type].size(); i++)
+		{
+			if (!obj_callbacks[event.type][i](objects_id[i], event.type))
+			{
+				obj_callbacks[event.type].erase(obj_callbacks[event.type].begin() + i);
+				objects_id.erase(objects_id.begin() + i);
+			}
 		}
 	}
 }

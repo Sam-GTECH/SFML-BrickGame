@@ -21,7 +21,7 @@ GameManager::GameManager(int limit, bool vsync)
 		text.setFillColor(sf::Color::White);
 	}
 
-	//Input.game = this;
+	Input.game = this;
 
 	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
 	GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
@@ -30,7 +30,7 @@ GameManager::GameManager(int limit, bool vsync)
 	addChild(obj2);
 	addChild(caac);
 
-	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {
+	Input.addInputEvent(this, sf::Event::MouseButtonPressed, [](GameManager* game, sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			cout << "el rightto" << endl;
@@ -44,7 +44,7 @@ GameManager::GameManager(int limit, bool vsync)
 			cout << "Gamer Mouse 2" << endl;*/
 		return true;
 	});
-	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {cout << "olee chitte 2.0" << endl; return false; });
+	Input.addInputEvent(this, sf::Event::LostFocus, [](GameManager* game, sf::Event::EventType event) -> bool {cout << "olee chitte 2.0" << endl; return false; });
 }
 
 GameManager::~GameManager()
