@@ -5,6 +5,9 @@
 #include <iostream>
 using namespace std;
 
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
 GameManager::GameManager(int limit, bool vsync)
 {
 	window.create(sf::VideoMode(640, 480), "SFML", sf::Style::Close);
@@ -29,6 +32,15 @@ GameManager::GameManager(int limit, bool vsync)
 	addChild(obj);
 	addChild(obj2);
 	addChild(caac);
+// 	obj->setVector(1, 1);
+// 	GameObject* brick1 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
+// 	GameObject* brick2 = new GameObject(420.f, 100.f, sf::Color::Green, 50.f, 50.f);
+// 	GameObject* brick3 = new GameObject(520.f, 100.f, sf::Color::Green, 50.f, 50.f);
+	//GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
+// 	bullets.push_back(obj);
+// 	blocks.push_back(brick1);
+// 	blocks.push_back(brick2);
+	//blocks.push_back(brick3);
 
 	Input.addInputEvent(this, sf::Event::MouseButtonPressed, [](GameManager* game, sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
@@ -50,10 +62,20 @@ GameManager::GameManager(int limit, bool vsync)
 GameManager::~GameManager()
 {
 	window.~RenderWindow();
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < blocks.size(); i++)
 	{
-		delete objects[i];
+		delete blocks[i];
 	}
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		delete bullets[i];
+	}
+}
+
+bool GameManager::rectOverlap(GameObject& object1, GameObject& object2)
+{
+	return object1.x < object2.x + object2.width && object1.x + object1.width > object2.x && object1.y < object2.y + object2.height && object1.y + object1.height > object2.y;
 }
 
 void GameManager::gameLoop()
@@ -88,11 +110,39 @@ void GameManager::gameLoop()
 
 void GameManager::update()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < blocks.size(); i++)
 	{
-		objects[i]->update(deltaTime);
+		blocks[i]->update(deltaTime);
 	}
 
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		bullets[i]->update(deltaTime);
+		if (bullets[i]->x < 0)
+			bullets[i]->changeDirection("right");
+		if (bullets[i]->x + bullets[i]->width > SCREEN_WIDTH)
+			bullets[i]->changeDirection("left");
+		if (bullets[i]->y < 0)
+			bullets[i]->changeDirection("down");
+		if (bullets[i]->y + bullets[i]->height > SCREEN_HEIGHT)
+			bullets[i]->changeDirection("up");
+	}
+
+	for (int i = 0; i < blocks.size(); i++)
+	{
+		if (rectOverlap(*bullets[0], *blocks[i]))
+		{
+			bullets[0]->collided(*blocks[i]);
+			bullets[0]->enterCollision();
+		}
+		else
+		{
+			bullets[0]->exitCollision();
+		}
+	}
+
+	
+	// only used to display FPS.
 	if (show_fps)
 	{
 		fpsTimer += deltaTime;
@@ -111,9 +161,14 @@ void GameManager::update()
 
 void GameManager::draw()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < blocks.size(); i++)
 	{
-		objects[i]->draw(window);
+		blocks[i]->draw(window);
+	}
+
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		bullets[i]->draw(window);
 	}
 
 	window.draw(text);

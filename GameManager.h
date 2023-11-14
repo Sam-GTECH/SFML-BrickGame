@@ -26,7 +26,8 @@ class GameManager
 	public:
 		sf::RenderWindow window;
 		InputManager Input;
-		std::vector<GameObject*> objects;
+		std::vector<GameObject*> blocks;
+		std::vector<GameObject*> bullets;
 
 		float deltaTime = deltaClock.restart().asSeconds();
 		
@@ -35,6 +36,7 @@ class GameManager
 		GameManager(int limit, bool vsync);
 		~GameManager();
 
+		bool rectOverlap(GameObject& object1, GameObject& object2);
 		void gameLoop();
 		void addChild(GameObject* obj);
 
