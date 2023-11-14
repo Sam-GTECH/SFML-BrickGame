@@ -28,6 +28,7 @@ class GameManager
 		InputManager Input;
 		std::vector<GameObject*> blocks;
 		std::vector<GameObject*> bullets;
+		std::vector<GameObject*> objects;
 
 		float deltaTime = deltaClock.restart().asSeconds();
 		
