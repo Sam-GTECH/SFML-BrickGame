@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GameObject.h"
+#include "Canon.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 using namespace std;
@@ -23,20 +24,25 @@ GameManager::GameManager(int limit, bool vsync)
 		text.setFillColor(sf::Color::White);
 	}
 
-	//Input.game = this;
+	Input.game = this;
 
 	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
-	obj->setVector(1, 1);
-	GameObject* brick1 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
-	GameObject* brick2 = new GameObject(420.f, 100.f, sf::Color::Green, 50.f, 50.f);
-	GameObject* brick3 = new GameObject(520.f, 100.f, sf::Color::Green, 50.f, 50.f);
+	GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
+	Canon* caac = new Canon(640 / 2, 440, sf::Color::Cyan, 100.f, 50.f);
+	addChild(obj);
+	addChild(obj2);
+	addChild(caac);
+// 	obj->setVector(1, 1);
+// 	GameObject* brick1 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
+// 	GameObject* brick2 = new GameObject(420.f, 100.f, sf::Color::Green, 50.f, 50.f);
+// 	GameObject* brick3 = new GameObject(520.f, 100.f, sf::Color::Green, 50.f, 50.f);
 	//GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
-	bullets.push_back(obj);
-	blocks.push_back(brick1);
-	blocks.push_back(brick2);
-	blocks.push_back(brick3);
+// 	bullets.push_back(obj);
+// 	blocks.push_back(brick1);
+// 	blocks.push_back(brick2);
+	//blocks.push_back(brick3);
 
-	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {
+	Input.addInputEvent(this, sf::Event::MouseButtonPressed, [](GameManager* game, sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			cout << "el rightto" << endl;
@@ -50,7 +56,7 @@ GameManager::GameManager(int limit, bool vsync)
 			cout << "Gamer Mouse 2" << endl;*/
 		return true;
 	});
-	Input.addInputEvent(sf::Event::MouseButtonPressed, [](sf::Event::EventType event) -> bool {cout << "olee chitte 2.0" << endl; return false; });
+	Input.addInputEvent(this, sf::Event::LostFocus, [](GameManager* game, sf::Event::EventType event) -> bool {cout << "olee chitte 2.0" << endl; return false; });
 }
 
 GameManager::~GameManager()
@@ -168,4 +174,12 @@ void GameManager::draw()
 	window.draw(text);
 
 	window.display();
+}
+
+void GameManager::addChild(GameObject* obj)
+{
+	objects.push_back(obj);
+	obj->Input = &Input;
+	obj->Game = this;
+	obj->postInit();
 }

@@ -38,6 +38,7 @@ class GameManager
 
 		bool rectOverlap(GameObject& object1, GameObject& object2);
 		void gameLoop();
+		void addChild(GameObject* obj);
 
 	private:
 		void update();
