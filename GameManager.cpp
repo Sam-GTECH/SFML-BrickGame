@@ -71,6 +71,10 @@ GameManager::~GameManager()
 	{
 		delete bullets[i];
 	}
+	for (int i = 0; i < objects.size(); i++)
+	{
+		delete objects[i];
+	}
 }
 
 bool GameManager::rectOverlap(GameObject& object1, GameObject& object2)
@@ -113,6 +117,10 @@ void GameManager::update()
 	for (int i = 0; i < blocks.size(); i++)
 	{
 		blocks[i]->update(deltaTime);
+	}
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->update(deltaTime);
 	}
 
 	for (int i = 0; i < bullets.size(); i++)
@@ -169,6 +177,10 @@ void GameManager::draw()
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		bullets[i]->draw(window);
+	}
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->draw(window);
 	}
 
 	window.draw(text);
