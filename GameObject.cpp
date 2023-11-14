@@ -21,7 +21,7 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
     x = x;
     y = y;
     width = r*2;
-    height = r*2;
+    height = r * 2;
 }
 
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
@@ -44,11 +44,14 @@ GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
     width = w;
     height = h;
 }
+GameObject::GameObject() {}
 
 GameObject::~GameObject()
 {
     delete shape;
 }
+
+void GameObject::postInit() {}
 
 ///////////////////////// SETTERS
 
@@ -79,6 +82,11 @@ void GameObject::setOrigin(float o_x, float o_y)
 float GameObject::getRotation()
 {
     return shape->getRotation();
+}
+
+sf::Vector2f GameObject::getOrigin()
+{
+    return shape->getOrigin();
 }
 
 //////////////////////////// GAME EVENTS

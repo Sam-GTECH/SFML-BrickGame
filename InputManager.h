@@ -6,17 +6,26 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 using namespace std;
 
+class GameObject;
+class GameManager;
+
 class InputManager
 {
-	map<sf::Event::EventType, vector<bool (*)(sf::Event::EventType event)>> callbacks;
+	map<sf::Event::EventType, vector<bool (*)(GameObject* obj, sf::Event::EventType event)>> obj_callbacks;
+	map<sf::Event::EventType, vector<bool (*)(GameManager* game, sf::Event::EventType event)>> game_callbacks;
+	vector<GameObject*> objects_id;
+
 	sf::Mouse mouse;
 	sf::Keyboard keyboard;
 	sf::Joystick joystick;
 
 	public:
+		GameManager* game;
+
 		InputManager();
 
-		void addInputEvent(sf::Event::EventType event, bool (*func)(sf::Event::EventType event));
+		void addInputEvent(GameObject* obj, sf::Event::EventType event, bool (*func)(GameObject* obj, sf::Event::EventType event));
+		void addInputEvent(GameManager* obj, sf::Event::EventType event, bool (*func)(GameManager* game, sf::Event::EventType event));
 
 		void handleEvents(sf::Event event);
 
