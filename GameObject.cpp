@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 
 #include <string>
+#include <cmath>
 
 GameObject::GameObject(float x, float y, sf::Color color, float r)
 {
@@ -90,7 +91,11 @@ void GameObject::draw(sf::RenderWindow& win)
 void GameObject::update( float deltaTime)
 {
     const sf::Vector2f* curPosition = &shape->getPosition();
-    shape->setPosition(curPosition->x + speedVect.x * deltaTime * moveSpeed, curPosition->y + speedVect.y * deltaTime * moveSpeed);
+    float newPosX = curPosition->x + speedVect.x * deltaTime * moveSpeed;
+    float newPosY = curPosition->y + speedVect.y * deltaTime * moveSpeed;
+    x = newPosX;
+    y = newPosY;
+    shape->setPosition(newPosX, newPosY);
 }
 
 void GameObject::setVector(float x, float y)
@@ -109,37 +114,78 @@ sf::Vector2f GameObject::getSize()
     return sf::Vector2f(width, height);
 }
 
-void GameObject::draw(sf::RenderWindow& win)
+void GameObject::enterCollision()
 {
-    win.draw(*shape);
+    collision = true;
 }
 
-bool GameObject::rectOverlap(GameObject object)
+void GameObject::exitCollision()
 {
-    sf::Vector2f curPos = shape->getPosition();
-    colision = curPos.x < object.x + object.width && curPos.x + width > object.x && curPos.y < object.y + object.height && curPos.y + height > object.y;
-    return colision;
+    collision = false;
 }
 
-bool GameObject::enterColision(GameObject object)
+void GameObject::changeDirection(std::string side)
 {
-    return colision ? rectOverlap(object) : false;
-}
-
-void GameObject::exitColision(GameObject object)
-{
-    if (colision)
-        colision = rectOverlap(object);
-}
-
-void GameObject::collide(std::string side)
-{
-    if (side == "up")
+    if (side == "down")
         speedVect.y = 1;
-    else if (side == "down")
+    else if (side == "up")
         speedVect.y = -1;
-    else if (side == "left")
-        speedVect.x = 1;
     else if (side == "right")
+        speedVect.x = 1;
+    else if (side == "left")
         speedVect.x = -1;
+}
+
+void GameObject::collided(GameObject& object)
+{
+    if (collision)
+    {
+        return;
+    }
+    // Most of this stuff would probably be good to keep stored inside the player
+    // along side their x and y position. That way it doesn't have to be recalculated
+    // every collision check
+    float playerHalfW = this->width / 2;
+    float playerHalfH = this->height / 2;
+    float enemyHalfW = object.width / 2;
+    float enemyHalfH = object.height / 2;
+    float playerCenterX = this->x + this->width / 2;
+    float playerCenterY = this->y + this->height / 2;
+    float enemyCenterX = object.x + object.width / 2;
+    float enemyCenterY = object.y + object.height / 2;
+
+    // Calculate the distance between centers
+    float diffX = playerCenterX - enemyCenterX;
+    float diffY = playerCenterY - enemyCenterY;
+
+    // Calculate the minimum distance to separate along X and Y
+    float minXDist = playerHalfW + enemyHalfW;
+    float minYDist = playerHalfH + enemyHalfH;
+
+    // Calculate the depth of collision for both the X and Y axis
+    float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
+    float depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
+
+    // Now that you have the depth, you can pick the smaller depth and move
+    // along that axis.
+    if (depthX != 0 && depthY != 0) {
+        if (abs(depthX) < abs(depthY)) {
+            // Collision along the X axis. React accordingly
+            if (depthX > 0) {
+                changeDirection("right");
+            }
+            else {
+                changeDirection("left");
+            }
+        }
+        else {
+            // Collision along the Y axis.
+            if (depthY > 0) {
+                changeDirection("down");
+            }
+            else {
+                changeDirection("up");
+            }
+        }
+    }
 }
