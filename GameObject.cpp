@@ -20,7 +20,7 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
     x = x;
     y = y;
     width = r*2;
-    height = r*2;
+    height = r * 2;
 }
 
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)

@@ -4,10 +4,15 @@
 
 #include "GameManager.h"
 #include "InputManager.h"
+#include <vector>
+
+class Ball;
 
 class Canon : public GameObject
 {
 	public:
+		vector<Ball*> balls;
+
 		Canon(float x, float y, sf::Color color, float w, float h);
 		void postInit() override;
 
