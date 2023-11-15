@@ -86,6 +86,7 @@ void GameManager::gameLoop()
 {
 	while (run && window.isOpen())
 	{
+		if (window.hasFocus()) {
 		sf::Event oEvent;
 		while (window.pollEvent(oEvent))
 		{
@@ -96,6 +97,7 @@ void GameManager::gameLoop()
 				break;
 			}
 			Input.handleEvents(oEvent);
+		}
 		}
 
 		// If an event stopped the game, break from the game loop
