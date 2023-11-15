@@ -87,17 +87,17 @@ void GameManager::gameLoop()
 	while (run && window.isOpen())
 	{
 		if (window.hasFocus()) {
-		sf::Event oEvent;
-		while (window.pollEvent(oEvent))
-		{
-			if (oEvent.type == sf::Event::Closed)
+			sf::Event oEvent;
+			while (window.pollEvent(oEvent))
 			{
-				window.close();
-				run = false;
-				break;
+				if (oEvent.type == sf::Event::Closed)
+				{
+					window.close();
+					run = false;
+					break;
+				}
+				Input.handleEvents(oEvent);
 			}
-			Input.handleEvents(oEvent);
-		}
 		}
 
 		// If an event stopped the game, break from the game loop
