@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "GameObject.h"
 #include "Canon.h"
+#include "Brick.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 using namespace std;
@@ -32,6 +33,14 @@ GameManager::GameManager(int limit, bool vsync)
 	addChild(obj);
 	addChild(obj2);
 	addChild(caac);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 12; j++) {
+			Brick* brick = new Brick(50+(50*j), 50+(40*i), sf::Color::White);
+			addChild(brick);
+		}
+	}
 // 	obj->setVector(1, 1);
 // 	GameObject* brick1 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
 // 	GameObject* brick2 = new GameObject(420.f, 100.f, sf::Color::Green, 50.f, 50.f);
