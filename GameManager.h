@@ -41,6 +41,8 @@ class GameManager
 		void gameLoop();
 		void addChild(GameObject* obj);
 
+		void removeFrom(std::vector<GameObject*>* list, GameObject* obj);
+
 	private:
 		void update();
 		void draw();

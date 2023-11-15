@@ -195,3 +195,15 @@ void GameManager::addChild(GameObject* obj)
 	obj->Game = this;
 	obj->postInit();
 }
+
+void GameManager::removeFrom(std::vector<GameObject*>* list, GameObject* obj)
+{
+	auto& obj_list = *list;
+	for (auto it = obj_list.begin(); it != obj_list.end(); )
+	{
+		if (*it == obj)
+			it = obj_list.erase(it);
+		else
+			++it;
+	}
+}
