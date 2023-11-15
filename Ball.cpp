@@ -11,6 +11,7 @@ Ball::~Ball()
 void Ball::update(float deltaTime)
 {
 	GameObject::update(deltaTime);
-	//sf::Vector2i Game->window->getPosition()
-	//if (x > Game)
+	sf::Vector2u pos = Game->window.getSize();
+	if (x > pos.x+30 || x < -30 || y > pos.y+30 || y < -30)
+		delete this;
 }
