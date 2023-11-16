@@ -25,6 +25,7 @@ void Canon::postInit()
 		
 		Ball* ball = new Ball(x, y, sf::Color::Red, 10);
 		ball->setVector(cos(rot), sin(rot));
+		ball->canon = canon;
 		obj->Game->addBullet(ball);
 		canon->balls.push_back(ball);
 		return true;
@@ -42,18 +43,19 @@ void Canon::update(float dt)
 	sf::Vector2f pos = getPos();
 	sf::Vector2f orig_shape = getOrigin();
 
+	sf::Vector2u size = Game->window.getSize();
+
 	sf::Vector2f vect = pos + orig_shape;
-	float adj = mouse.x - vect.x;
+	float adj = mouse.x+50 - vect.x;
 	float opp = mouse.y - vect.y;
 
-	/*if (deg_angle > -10)
-		deg_angle = -10;
-	else if (deg_angle < -170)
-		deg_angle = -170;*/
-	//cout << angle << " || " << deg_angle << " (" << mouse.x << ", " << mouse.y << ")" << endl;
-	setRotation(math::angle(adj, opp, true) + 90);
+	float angle = math::angle(adj, opp, true) + 90;
+	if (mouse.x < size.x/2 && angle < 190)
+		angle = 190;
+	else if (mouse.x > size.x/2 && angle > -10)
+		angle = -10;
+	setRotation(angle);
 
-	cout << balls.size() << endl;
 	if (balls.size() == 1)
 		setColor(sf::Color(150, 150, 150, 255));
 	else

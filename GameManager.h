@@ -44,6 +44,8 @@ class GameManager
 		void addBullet(GameObject* obj);
 		void addBlock(GameObject* obj);
 
+		void removeFrom(std::vector<GameObject*>* list, GameObject* obj);
+
 	private:
 		void update();
 		void draw();

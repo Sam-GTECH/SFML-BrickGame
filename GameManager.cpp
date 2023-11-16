@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "GameObject.h"
 #include "Canon.h"
+#include "Brick.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 using namespace std;
@@ -32,6 +33,14 @@ GameManager::GameManager(int limit, bool vsync)
 	addBlock(obj);
 	//addBlock(obj2);
 	addChild(caac);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 12; j++) {
+			Brick* brick = new Brick(50+(50*j), 50+(40*i), sf::Color::White);
+			addChild(brick);
+		}
+	}
 
 	Input.addInputEvent(this, sf::Event::MouseButtonPressed, [](GameManager* game, sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
@@ -97,16 +106,18 @@ void GameManager::gameLoop()
 {
 	while (run && window.isOpen())
 	{
-		sf::Event oEvent;
-		while (window.pollEvent(oEvent))
-		{
-			if (oEvent.type == sf::Event::Closed)
+		if (window.hasFocus()) {
+			sf::Event oEvent;
+			while (window.pollEvent(oEvent))
 			{
-				window.close();
-				run = false;
-				break;
+				if (oEvent.type == sf::Event::Closed)
+				{
+					window.close();
+					run = false;
+					break;
+				}
+				Input.handleEvents(oEvent);
 			}
-			Input.handleEvents(oEvent);
 		}
 
 		// If an event stopped the game, break from the game loop
@@ -130,7 +141,7 @@ void GameManager::update()
 		objects[i]->update(deltaTime);
 	}
 
-	// collisions avec les bords de l'écran.
+	// collisions avec les bords de l'Ã©cran.
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		GameObject* curBullet = bullets[i];
@@ -208,6 +219,17 @@ void GameManager::addChild(GameObject* obj)
 	obj->postInit();
 }
 
+void GameManager::removeFrom(std::vector<GameObject*>* list, GameObject* obj)
+{
+	auto& obj_list = *list;
+	for (auto it = obj_list.begin(); it != obj_list.end(); )
+	{
+		if (*it == obj)
+			it = obj_list.erase(it);
+		else
+			++it;
+	}
+  
 void GameManager::addBullet(GameObject* obj)
 {
 	bullets.push_back(obj);
