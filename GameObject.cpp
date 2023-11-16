@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 
+// Circle shape
 GameObject::GameObject(float x, float y, sf::Color color, float r)
 {
     sf::CircleShape* oCircle = new sf::CircleShape(r);
@@ -24,6 +25,7 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
     height = r * 2;
 }
 
+// Rectangle shape
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
     :x(x), y(y), width(w), height(h)
 {
@@ -154,33 +156,5 @@ void GameObject::changeDirection(std::string side)
     else if (side == "left")
     {
         if (speedVect.x > 0) speedVect.x = speedVect.x * -1;
-    }
-}
-
-void GameObject::collided(GameObject& object)
-{
-    float xDist = x > object.x ? x - object.x : object.x - x;
-    float yDist = y > object.y ? y - object.y : object.y - y;
-    if (xDist < yDist)
-    {
-        if (y > object.y)
-        {
-            changeDirection("down");
-        }
-        else
-        {
-            changeDirection("up");
-        }
-    }
-    else
-    {
-        if (x > object.x)
-        {
-            changeDirection("right");
-        }
-        else
-        {
-            changeDirection("left");
-        }
     }
 }

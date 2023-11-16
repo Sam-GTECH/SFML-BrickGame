@@ -38,7 +38,7 @@ GameManager::GameManager(int limit, bool vsync)
 	{
 		for (int j = 0; j < 12; j++) {
 			Brick* brick = new Brick(50+(50*j), 50+(40*i), sf::Color::White);
-			addChild(brick);
+			addBlock(brick);
 		}
 	}
 
@@ -86,17 +86,20 @@ bool GameManager::rectCircOverlap(GameObject& rect, GameObject& circ)
 {
 	float testX = circ.x;
 	float testY = circ.y;
-	if (circ.x < rect.x)         testX = rect.x;        // left edge
-	else if (circ.x > rect.x + rect.width) testX = rect.x + rect.width;     // right edge
+	if (circ.x < rect.x)         
+		testX = rect.x;        // left edge
+	else if (circ.x > rect.x + rect.width) 
+		testX = rect.x + rect.width;     // right edge
 
-	if (circ.y < rect.y)         testY = rect.y;        // top edge
-	else if (circ.y > rect.y + rect.height) testY = rect.y + rect.height;     // bottom edge
+	if (circ.y < rect.y)         
+		testY = rect.y;        // top edge
+	else if (circ.y > rect.y + rect.height) 
+		testY = rect.y + rect.height;     // bottom edge
 
 	float distX = circ.x - testX;
 	float distY = circ.y - testY;
 	float distance = sqrt((distX * distX) + (distY * distY));
 	if (distance <= circ.getRadius()) {
-		cout << "mdr ca touche" << endl;
 		return true;
 	}
 	return false;
@@ -163,7 +166,7 @@ void GameManager::update()
 		{
 			if (rectCircOverlap(*blocks[i], *bullets[j]))
 			{
-				//bullets[j]->collided(*blocks[i]);
+				bullets[j]->collided(*blocks[i]);
 				bullets[j]->enterCollision();
 			}
 			else
@@ -201,6 +204,7 @@ void GameManager::draw()
 	{
 		bullets[i]->draw(window);
 	}
+
 	for (int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->draw(window);
@@ -229,6 +233,7 @@ void GameManager::removeFrom(std::vector<GameObject*>* list, GameObject* obj)
 		else
 			++it;
 	}
+}
   
 void GameManager::addBullet(GameObject* obj)
 {

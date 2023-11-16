@@ -2,6 +2,10 @@
 #include "Ball.h"
 #include <iostream>
 #include "math.hpp"
+
+#include "InputManager.h"
+#include "GameManager.h"
+
 using namespace std;
 
 Canon::Canon(float x, float y, sf::Color color, float w, float h) : GameObject(x, y, color, w, h)

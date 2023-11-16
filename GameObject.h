@@ -23,6 +23,7 @@ class GameObject
 		float y = 1;
 		float width = 1;
 		float height = 1;
+		bool collision = false;
   
 		GameObject(float x, float y, sf::Color color, float w, float h);
 		GameObject(float x, float y, sf::Color color, float r);
@@ -48,10 +49,9 @@ class GameObject
 		void enterCollision();
 		void exitCollision();
 		void changeDirection(std::string side);
-		void collided(GameObject& object);
+		virtual void collided(GameObject& object) {};
 
 	private:
-		bool collision = false;
 		int moveSpeed;
 		sf::Shape* shape;
 		sf::Vector2f speedVect;

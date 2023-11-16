@@ -31,7 +31,6 @@ class GameManager
 		std::vector<GameObject*> objects;
 
 		float deltaTime = deltaClock.restart().asSeconds();
-		
 		bool run = true;
 
 		GameManager(int limit, bool vsync);
