@@ -9,6 +9,11 @@ using namespace std;
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
+/// <summary>
+/// Create a instance that manages a whole game
+/// </summary>
+/// <param name="limit">The framerate limit</param>
+/// <param name="vsync">Decide if vsync is turn on or off</param>
 GameManager::GameManager(int limit, bool vsync)
 {
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML", sf::Style::Close);
@@ -102,6 +107,10 @@ bool GameManager::rectCircOverlap(GameObject& rect, GameObject& circ)
 	return false;
 }
 
+/// <summary>
+/// The main loop that runs the game.
+/// Closing or setting GameManager::run to false will stop it.
+/// </summary>
 void GameManager::gameLoop()
 {
 	while (run && window.isOpen())
@@ -211,14 +220,11 @@ void GameManager::draw()
 	window.display();
 }
 
-void GameManager::addChild(GameObject* obj)
-{
-	objects.push_back(obj);
-	obj->Input = &Input;
-	obj->Game = this;
-	obj->postInit();
-}
-
+/// <summary>
+/// Remove the GameObject obj from the vector list if it exists
+/// </summary>
+/// <param name="list">the vector to remove the GameObject from</param>
+/// <param name="obj">The GameObject instance to remove from the vector list</param>
 void GameManager::removeFrom(std::vector<GameObject*>* list, GameObject* obj)
 {
 	auto& obj_list = *list;
@@ -229,23 +235,42 @@ void GameManager::removeFrom(std::vector<GameObject*>* list, GameObject* obj)
 		else
 			++it;
 	}
+}
+
+/// <summary>
+/// Adds a GameObject to the objects table.
+/// </summary>
+/// <param name="obj">A GameObject instance</param>
 void GameManager::addObject(GameObject* obj)
 {
 	objects.push_back(obj);
 	addChild(obj);
 }
-  
+
+/// <summary>
+/// Adds a GameObject to the bullets table.
+/// </summary>
+/// <param name="obj">A GameObject instance</param>
 void GameManager::addBullet(GameObject* obj)
 {
 	bullets.push_back(obj);
 	addChild(obj);
 }
 
+/// <summary>
+/// Adds a GameObject to the blocks table.
+/// </summary>
+/// <param name="obj">A GameObject instance</param>
 void GameManager::addBlock(GameObject* obj)
 {
 	blocks.push_back(obj);
 	addChild(obj);
 }
+
+/// <summary>
+/// Gives an object their reference to the InputManager and the GameManager. Then calls their postInit() function.
+/// </summary>
+/// <param name="obj">A GameObject instance</param>
 void GameManager::addChild(GameObject* obj)
 {
 	obj->Input = &Input;

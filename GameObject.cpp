@@ -4,6 +4,13 @@
 #include <string>
 #include <cmath>
 
+/// <summary>
+/// Creates a new instance of a GameObject
+/// </summary>
+/// <param name="x">X position to spawn the object at</param>
+/// <param name="y">Y position to spawn the object at</param>
+/// <param name="color">The color of the object</param>
+/// <param name="r">The radius of the circle shape</param>
 GameObject::GameObject(float x, float y, sf::Color color, float r)
 {
     sf::CircleShape* oCircle = new sf::CircleShape(r);
@@ -24,6 +31,14 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
     height = r * 2;
 }
 
+/// <summary>
+/// Creates a new instance of a GameObject
+/// </summary>
+/// <param name="x">X position to spawn the object at</param>
+/// <param name="y">Y position to spawn the object at</param>
+/// <param name="color">The color of the object</param>
+/// <param name="w">The width of the rectangle shape</param>
+/// <param name="h">The height of the rectangle shape</param>
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
     :x(x), y(y), width(w), height(h)
 {
@@ -51,6 +66,9 @@ GameObject::~GameObject()
     delete shape;
 }
 
+/// <summary>
+/// Called after using GameManager::addChild() on the instance. InputManager and GameManager can be accessed here.
+/// </summary>
 void GameObject::postInit() {}
 
 ///////////////////////// SETTERS
@@ -137,6 +155,10 @@ void GameObject::exitCollision()
     collision = false;
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="side">Either "down", "up", "right" or "left"</param>
 void GameObject::changeDirection(std::string side)
 {
     if (side == "down")
@@ -157,6 +179,10 @@ void GameObject::changeDirection(std::string side)
     }
 }
 
+/// <summary>
+/// Changes the direction of the object if it collided with another
+/// </summary>
+/// <param name="object">the other object to test collision with</param>
 void GameObject::collided(GameObject& object)
 {
     float xDist = x > object.x ? x - object.x : object.x - x;
