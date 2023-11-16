@@ -6,7 +6,6 @@ using namespace std;
 
 Canon::Canon(float x, float y, sf::Color color, float w, float h) : GameObject(x, y, color, w, h)
 {
-	cout << "canon" << endl;
 	setRotation(90);
 }
 
@@ -26,8 +25,8 @@ void Canon::postInit()
 		
 		Ball* ball = new Ball(x, y, sf::Color::Red, 10);
 		ball->setVector(cos(rot), sin(rot));
-		obj->Game->addChild(ball);
 		ball->canon = canon;
+		obj->Game->addBullet(ball);
 		canon->balls.push_back(ball);
 		return true;
 	});

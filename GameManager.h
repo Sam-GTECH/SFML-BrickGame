@@ -38,8 +38,11 @@ class GameManager
 		~GameManager();
 
 		bool rectOverlap(GameObject& object1, GameObject& object2);
+		bool rectCircOverlap(GameObject& object1, GameObject& object2);
 		void gameLoop();
 		void addChild(GameObject* obj);
+		void addBullet(GameObject* obj);
+		void addBlock(GameObject* obj);
 
 		void removeFrom(std::vector<GameObject*>* list, GameObject* obj);
 

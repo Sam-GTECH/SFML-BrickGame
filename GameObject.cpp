@@ -25,7 +25,7 @@ GameObject::GameObject(float x, float y, sf::Color color, float r)
 }
 
 GameObject::GameObject(float x, float y, sf::Color color, float w, float h)
-    :width(w), height(h)
+    :x(x), y(y), width(w), height(h)
 {
     sf::RectangleShape* oRectangle = new sf::RectangleShape(sf::Vector2f(w, h));
     oRectangle->setPosition(x, y);
@@ -117,6 +117,11 @@ sf::Vector2f GameObject::getPos()
     return shape->getPosition();
 }
 
+float GameObject::getRadius()
+{
+    return width/2;
+}
+
 sf::Vector2f GameObject::getSize()
 {
     return sf::Vector2f(width, height);
@@ -135,65 +140,47 @@ void GameObject::exitCollision()
 void GameObject::changeDirection(std::string side)
 {
     if (side == "down")
-        speedVect.y = 1;
+    {
+        if (speedVect.y < 0) speedVect.y = speedVect.y * -1;
+    }
     else if (side == "up")
-        speedVect.y = -1;
+    {
+        if (speedVect.y > 0) speedVect.y = speedVect.y * -1;
+    }
     else if (side == "right")
-        speedVect.x = 1;
+    {
+        if (speedVect.x < 0) speedVect.x = speedVect.x * -1;
+    }
     else if (side == "left")
-        speedVect.x = -1;
+    {
+        if (speedVect.x > 0) speedVect.x = speedVect.x * -1;
+    }
 }
 
 void GameObject::collided(GameObject& object)
 {
-    if (collision)
+    float xDist = x > object.x ? x - object.x : object.x - x;
+    float yDist = y > object.y ? y - object.y : object.y - y;
+    if (xDist < yDist)
     {
-        return;
-    }
-    // Most of this stuff would probably be good to keep stored inside the player
-    // along side their x and y position. That way it doesn't have to be recalculated
-    // every collision check
-    float playerHalfW = this->width / 2;
-    float playerHalfH = this->height / 2;
-    float enemyHalfW = object.width / 2;
-    float enemyHalfH = object.height / 2;
-    float playerCenterX = this->x + this->width / 2;
-    float playerCenterY = this->y + this->height / 2;
-    float enemyCenterX = object.x + object.width / 2;
-    float enemyCenterY = object.y + object.height / 2;
-
-    // Calculate the distance between centers
-    float diffX = playerCenterX - enemyCenterX;
-    float diffY = playerCenterY - enemyCenterY;
-
-    // Calculate the minimum distance to separate along X and Y
-    float minXDist = playerHalfW + enemyHalfW;
-    float minYDist = playerHalfH + enemyHalfH;
-
-    // Calculate the depth of collision for both the X and Y axis
-    float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
-    float depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
-
-    // Now that you have the depth, you can pick the smaller depth and move
-    // along that axis.
-    if (depthX != 0 && depthY != 0) {
-        if (abs(depthX) < abs(depthY)) {
-            // Collision along the X axis. React accordingly
-            if (depthX > 0) {
-                changeDirection("right");
-            }
-            else {
-                changeDirection("left");
-            }
+        if (y > object.y)
+        {
+            changeDirection("down");
         }
-        else {
-            // Collision along the Y axis.
-            if (depthY > 0) {
-                changeDirection("down");
-            }
-            else {
-                changeDirection("up");
-            }
+        else
+        {
+            changeDirection("up");
+        }
+    }
+    else
+    {
+        if (x > object.x)
+        {
+            changeDirection("right");
+        }
+        else
+        {
+            changeDirection("left");
         }
     }
 }
