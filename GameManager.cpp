@@ -3,7 +3,6 @@
 #include "Canon.h"
 #include "Brick.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
 using namespace std;
 
 #define SCREEN_WIDTH 640
@@ -32,11 +31,7 @@ GameManager::GameManager(int limit, bool vsync)
 
 	Input.game = this;
 
-	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
-	GameObject* obj2 = new GameObject(500.f, 400.f, sf::Color::Blue, 50.f, 50.f);
 	Canon* caac = new Canon(640 / 2, 440, sf::Color::Cyan, 100.f, 50.f);
-	addBlock(obj);
-	//addBlock(obj2);
 	addObject(caac);
 
 	for (int i = 0; i < 4; i++)
@@ -46,22 +41,6 @@ GameManager::GameManager(int limit, bool vsync)
 			addBlock(brick);
 		}
 	}
-
-	Input.addInputEvent(this, sf::Event::MouseButtonPressed, [](GameManager* game, sf::Event::EventType event) -> bool {
-		cout << "olee chitte" << endl;
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-			cout << "el rightto" << endl;
-		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			cout << "el leftto" << endl;
-		else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
-			cout << "ur mid" << endl;
-		/*else if (event.mouseButton.button == sf::Mouse::XButton1)
-			cout << "Gamer Mouse 1" << endl;
-		else if (event.mouseButton.button == sf::Mouse::XButton2)
-			cout << "Gamer Mouse 2" << endl;*/
-		return true;
-	});
-	Input.addInputEvent(this, sf::Event::LostFocus, [](GameManager* game, sf::Event::EventType event) -> bool {cout << "olee chitte 2.0" << endl; return false; });
 }
 
 GameManager::~GameManager()
@@ -101,7 +80,6 @@ bool GameManager::rectCircOverlap(GameObject& rect, GameObject& circ)
 	float distY = circ.y - testY;
 	float distance = sqrt((distX * distX) + (distY * distY));
 	if (distance <= circ.getRadius()) {
-		cout << "mdr ca touche" << endl;
 		return true;
 	}
 	return false;
@@ -162,18 +140,17 @@ void GameManager::update()
 			curBullet->changeDirection("left");
 		if (curBullet->y - curRadius < 0)
 			curBullet->changeDirection("down");
-		//if (curBullet->y + curRadius > SCREEN_HEIGHT)
-			//curBullet->changeDirection("up");
 	}
 
 	for (int i = 0; i < blocks.size(); i++)
 	{
 		for (int j = 0; j < bullets.size(); j++)
 		{
-			if (rectCircOverlap(*blocks[i], *bullets[j]))
+			if (rectOverlap(*blocks[i], *bullets[j]))
 			{
-				//bullets[j]->collided(*blocks[i]);
+				bullets[j]->collided(*blocks[i]);
 				bullets[j]->enterCollision();
+				delete dynamic_cast<Brick*>(blocks[i]);
 			}
 			else
 			{

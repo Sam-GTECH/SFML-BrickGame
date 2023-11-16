@@ -1,13 +1,9 @@
 #include "Ball.h"
-#include <iostream>
 
-Ball::Ball(float x, float y, sf::Color color, float r) : GameObject(x, y, color, r) {
-	//sf::Color
-}
+Ball::Ball(float x, float y, sf::Color color, float r) : GameObject(x, y, color, r) {}
 
 void Ball::update(float deltaTime)
 {
-	cout << active << endl;
 	if (active)
 	{
 		GameObject::update(deltaTime);

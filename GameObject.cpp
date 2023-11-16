@@ -185,28 +185,50 @@ void GameObject::changeDirection(std::string side)
 /// <param name="object">the other object to test collision with</param>
 void GameObject::collided(GameObject& object)
 {
-    float xDist = x > object.x ? x - object.x : object.x - x;
-    float yDist = y > object.y ? y - object.y : object.y - y;
-    if (xDist < yDist)
-    {
-        if (y > object.y)
-        {
-            changeDirection("down");
+    // Most of this stuff would probably be good to keep stored inside the player
+// along side their x and y position. That way it doesn't have to be recalculated
+// every collision check
+    float playerHalfW = this->width / 2;
+    float playerHalfH = this->height / 2;
+    float enemyHalfW = object.width / 2;
+    float enemyHalfH = object.height / 2;
+    float playerCenterX = this->x + this->width / 2;
+    float playerCenterY = this->y + this->height / 2;
+    float enemyCenterX = object.x + object.width / 2;
+    float enemyCenterY = object.y + object.height / 2;
+
+    // Calculate the distance between centers
+    float diffX = playerCenterX - enemyCenterX;
+    float diffY = playerCenterY - enemyCenterY;
+
+    // Calculate the minimum distance to separate along X and Y
+    float minXDist = playerHalfW + enemyHalfW;
+    float minYDist = playerHalfH + enemyHalfH;
+
+    // Calculate the depth of collision for both the X and Y axis
+    float depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
+    float depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
+
+    // Now that you have the depth, you can pick the smaller depth and move
+    // along that axis.
+    if (depthX != 0 && depthY != 0) {
+        if (abs(depthX) < abs(depthY)) {
+            // Collision along the X axis. React accordingly
+            if (depthX > 0) {
+                changeDirection("right");
+            }
+            else {
+                changeDirection("left");
+            }
         }
-        else
-        {
-            changeDirection("up");
-        }
-    }
-    else
-    {
-        if (x > object.x)
-        {
-            changeDirection("right");
-        }
-        else
-        {
-            changeDirection("left");
+        else {
+            // Collision along the Y axis.
+            if (depthY > 0) {
+                changeDirection("down");
+            }
+            else {
+                changeDirection("up");
+            }
         }
     }
 }

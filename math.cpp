@@ -17,4 +17,15 @@ namespace math {
 			angle = angle * (180 / pi);
 		return angle;
 	}
+
+	/// <summary>
+	/// Normalizes a vector
+	/// </summary>
+	/// <param name="vector">A 2D float vector</param>
+	void normalizeVector(sf::Vector2f* vector)
+	{
+		float norme = sqrt(vector->x * vector->x + vector->y * vector->y);
+		vector->x = vector->x / norme;
+		vector->y = vector->y / norme;
+	}
 }

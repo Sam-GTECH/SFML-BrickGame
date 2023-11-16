@@ -10,7 +10,7 @@ Brick::Brick(float x, float y, sf::Color color, float w, float h) : GameObject(x
 }
 Brick::~Brick()
 {
-	Game->removeFrom(&Game->objects, this);
+	Game->removeFrom(&Game->blocks, this);
 }
 
 void Brick::update(float deltaTime)

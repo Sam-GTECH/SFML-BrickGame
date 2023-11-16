@@ -1,6 +1,5 @@
 #include "InputManager.h"
 #include "SFML/System/Vector2.hpp"
-#include <iostream>
 using namespace std;
 
 InputManager::InputManager() {}
