@@ -77,6 +77,12 @@ void GameObject::setOrigin(float o_x, float o_y)
     shape->setOrigin(o_x*width, o_y*height);
 }
 
+void GameObject::setVector(float x, float y)
+{
+    speedVect.x = x;
+    speedVect.y = y;
+}
+
 ///////////////////////// GETTERS
 
 float GameObject::getRotation()
@@ -87,6 +93,21 @@ float GameObject::getRotation()
 sf::Vector2f GameObject::getOrigin()
 {
     return shape->getOrigin();
+}
+
+sf::Vector2f GameObject::getPos()
+{
+    return shape->getPosition();
+}
+
+float GameObject::getRadius()
+{
+    return width / 2;
+}
+
+sf::Vector2f GameObject::getSize()
+{
+    return sf::Vector2f(width, height);
 }
 
 //////////////////////////// GAME EVENTS
@@ -104,27 +125,6 @@ void GameObject::update( float deltaTime)
     x = newPosX;
     y = newPosY;
     shape->setPosition(newPosX, newPosY);
-}
-
-void GameObject::setVector(float x, float y)
-{
-    speedVect.x = x;
-    speedVect.y = y;
-}
-
-sf::Vector2f GameObject::getPos()
-{
-    return shape->getPosition();
-}
-
-float GameObject::getRadius()
-{
-    return width/2;
-}
-
-sf::Vector2f GameObject::getSize()
-{
-    return sf::Vector2f(width, height);
 }
 
 void GameObject::enterCollision()

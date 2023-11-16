@@ -8,6 +8,7 @@ class Ball : public GameObject
 {
 	public:
 		Canon* canon;
+		bool active = false;
 
 		Ball(float x, float y, sf::Color color, float r);
 		~Ball();

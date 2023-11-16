@@ -11,7 +11,7 @@ class Ball;
 class Canon : public GameObject
 {
 	public:
-		vector<Ball*> balls;
+		Ball* ball;
 
 		Canon(float x, float y, sf::Color color, float w, float h);
 		void postInit() override;

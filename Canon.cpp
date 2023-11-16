@@ -1,7 +1,7 @@
 #include "Canon.h"
 #include "Ball.h"
 #include <iostream>
-#include "math.hpp"
+#include "math.h"
 using namespace std;
 
 Canon::Canon(float x, float y, sf::Color color, float w, float h) : GameObject(x, y, color, w, h)
@@ -16,20 +16,25 @@ void Canon::postInit()
 		Canon* canon = dynamic_cast<Canon*>(obj);
 		if (!canon)
 			return true;
-		else if (canon->balls.size() > 0)
+		else if (canon->ball->active)
 			return true;
-		sf::Vector2f pos = obj->getPos();
-		float rot = obj->getRotation() * ((atan(1) * 4) / 180);
-		float x = pos.x + obj->width/2 * cos(rot);
-		float y = pos.y + (obj->height) * sin(rot);
 		
-		Ball* ball = new Ball(x, y, sf::Color::Red, 10);
-		ball->setVector(cos(rot), sin(rot));
-		ball->canon = canon;
-		obj->Game->addBullet(ball);
-		canon->balls.push_back(ball);
+		sf::Vector2f pos = canon->getPos();
+		float rot = canon->getRotation() * ((atan(1) * 4) / 180);
+		float x = pos.x + canon->width / 2 * cos(rot);
+		float y = pos.y + (canon->height) * sin(rot);
+
+		canon->ball->setPosition(x, y);
+		canon->ball->setVector(cos(rot), sin(rot));
+		
+		canon->ball->active = true;
 		return true;
 	});
+
+	Ball* b = new Ball(-999, -999, sf::Color::Red, 10);
+	b->canon = this;
+	ball = b;
+	Game->addBullet(ball);
 }
 
 float getVectPos(sf::Vector2f vect)
@@ -56,7 +61,7 @@ void Canon::update(float dt)
 		angle = -10;
 	setRotation(angle);
 
-	if (balls.size() == 1)
+	if (ball->active)
 		setColor(sf::Color(150, 150, 150, 255));
 	else
 		setColor(sf::Color::Cyan);

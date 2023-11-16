@@ -41,6 +41,7 @@ class GameManager
 		bool rectCircOverlap(GameObject& object1, GameObject& object2);
 		void gameLoop();
 		void addChild(GameObject* obj);
+		void addObject(GameObject* obj);
 		void addBullet(GameObject* obj);
 		void addBlock(GameObject* obj);
 

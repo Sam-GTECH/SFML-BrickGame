@@ -43,18 +43,19 @@ sf::Vector2i InputManager::getMousePos(sf::RenderWindow& window, bool clamp)
 {
 	sf::Vector2i m = mouse.getPosition();
 	sf::Vector2i w = window.getPosition();
+	sf::Vector2u s = window.getSize();
 	int x = (m.x - w.x)-7;
 	int y = (m.y - w.y)-30;
 	if (clamp)
 	{
 		if (x < 0)
 			x = 0;
-		else if (x > 640)
-			x = 640;
+		else if (x > s.x)
+			x = s.x;
 		if (y < 0)
 			y = 0;
-		else if (y > 480)
-			y = 480;
+		else if (y > s.y)
+			y = s.y;
 	}
 	return sf::Vector2i(x, y);
 }

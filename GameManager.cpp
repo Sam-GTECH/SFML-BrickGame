@@ -11,7 +11,7 @@ using namespace std;
 
 GameManager::GameManager(int limit, bool vsync)
 {
-	window.create(sf::VideoMode(640, 480), "SFML", sf::Style::Close);
+	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML", sf::Style::Close);
 	window.setFramerateLimit(limit);
 	window.setVerticalSyncEnabled(vsync);
 
@@ -32,13 +32,13 @@ GameManager::GameManager(int limit, bool vsync)
 	Canon* caac = new Canon(640 / 2, 440, sf::Color::Cyan, 100.f, 50.f);
 	addBlock(obj);
 	//addBlock(obj2);
-	addChild(caac);
+	addObject(caac);
 
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 12; j++) {
 			Brick* brick = new Brick(50+(50*j), 50+(40*i), sf::Color::White);
-			addChild(brick);
+			addBlock(brick);
 		}
 	}
 
@@ -153,8 +153,8 @@ void GameManager::update()
 			curBullet->changeDirection("left");
 		if (curBullet->y - curRadius < 0)
 			curBullet->changeDirection("down");
-		if (curBullet->y + curRadius > SCREEN_HEIGHT)
-			curBullet->changeDirection("up");
+		//if (curBullet->y + curRadius > SCREEN_HEIGHT)
+			//curBullet->changeDirection("up");
 	}
 
 	for (int i = 0; i < blocks.size(); i++)
@@ -229,18 +229,25 @@ void GameManager::removeFrom(std::vector<GameObject*>* list, GameObject* obj)
 		else
 			++it;
 	}
+void GameManager::addObject(GameObject* obj)
+{
+	objects.push_back(obj);
+	addChild(obj);
+}
   
 void GameManager::addBullet(GameObject* obj)
 {
 	bullets.push_back(obj);
-	obj->Input = &Input;
-	obj->Game = this;
-	obj->postInit();
+	addChild(obj);
 }
 
 void GameManager::addBlock(GameObject* obj)
 {
 	blocks.push_back(obj);
+	addChild(obj);
+}
+void GameManager::addChild(GameObject* obj)
+{
 	obj->Input = &Input;
 	obj->Game = this;
 	obj->postInit();
