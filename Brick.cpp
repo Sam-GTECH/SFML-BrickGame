@@ -1,5 +1,7 @@
 #include "Brick.h"
 
+#include "GameManager.h"
+
 Brick::Brick(float x, float y, sf::Color color) : GameObject(x, y, color, 40, 20)
 {
 }

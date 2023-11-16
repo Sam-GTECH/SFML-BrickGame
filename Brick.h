@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GameObject.h"
-#include "GameManager.h"
 
 class Brick : public GameObject
 {
