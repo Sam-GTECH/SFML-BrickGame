@@ -37,6 +37,7 @@ class GameObject
 		void setOrigin(float o_x, float o_y);
 
 		float getRotation();
+		float getRadius();
   
 		virtual void update(float deltaTime);
 		void setVector(float x, float y);

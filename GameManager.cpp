@@ -27,20 +27,11 @@ GameManager::GameManager(int limit, bool vsync)
 	Input.game = this;
 
 	GameObject* obj = new GameObject(100.f, 100.f, sf::Color::Blue, 50.f, 50.f);
-	GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
+	GameObject* obj2 = new GameObject(500.f, 400.f, sf::Color::Blue, 50.f, 50.f);
 	Canon* caac = new Canon(640 / 2, 440, sf::Color::Cyan, 100.f, 50.f);
-	addChild(obj);
-	addChild(obj2);
+	addBlock(obj);
+	//addBlock(obj2);
 	addChild(caac);
-// 	obj->setVector(1, 1);
-// 	GameObject* brick1 = new GameObject(320.f, 100.f, sf::Color::Green, 50.f, 50.f);
-// 	GameObject* brick2 = new GameObject(420.f, 100.f, sf::Color::Green, 50.f, 50.f);
-// 	GameObject* brick3 = new GameObject(520.f, 100.f, sf::Color::Green, 50.f, 50.f);
-	//GameObject* obj2 = new GameObject(320, 240.f, sf::Color::Green, 50.f);
-// 	bullets.push_back(obj);
-// 	blocks.push_back(brick1);
-// 	blocks.push_back(brick2);
-	//blocks.push_back(brick3);
 
 	Input.addInputEvent(this, sf::Event::MouseButtonPressed, [](GameManager* game, sf::Event::EventType event) -> bool {
 		cout << "olee chitte" << endl;
@@ -71,11 +62,35 @@ GameManager::~GameManager()
 	{
 		delete bullets[i];
 	}
+	for (int i = 0; i < objects.size(); i++)
+	{
+		delete objects[i];
+	}
 }
 
 bool GameManager::rectOverlap(GameObject& object1, GameObject& object2)
 {
 	return object1.x < object2.x + object2.width && object1.x + object1.width > object2.x && object1.y < object2.y + object2.height && object1.y + object1.height > object2.y;
+}
+
+bool GameManager::rectCircOverlap(GameObject& rect, GameObject& circ)
+{
+	float testX = circ.x;
+	float testY = circ.y;
+	if (circ.x < rect.x)         testX = rect.x;        // left edge
+	else if (circ.x > rect.x + rect.width) testX = rect.x + rect.width;     // right edge
+
+	if (circ.y < rect.y)         testY = rect.y;        // top edge
+	else if (circ.y > rect.y + rect.height) testY = rect.y + rect.height;     // bottom edge
+
+	float distX = circ.x - testX;
+	float distY = circ.y - testY;
+	float distance = sqrt((distX * distX) + (distY * distY));
+	if (distance <= circ.getRadius()) {
+		cout << "mdr ca touche" << endl;
+		return true;
+	}
+	return false;
 }
 
 void GameManager::gameLoop()
@@ -110,37 +125,42 @@ void GameManager::gameLoop()
 
 void GameManager::update()
 {
-	for (int i = 0; i < blocks.size(); i++)
+	for (int i = 0; i < objects.size(); i++)
 	{
-		blocks[i]->update(deltaTime);
+		objects[i]->update(deltaTime);
 	}
 
+	// collisions avec les bords de l'écran.
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		bullets[i]->update(deltaTime);
-		if (bullets[i]->x < 0)
-			bullets[i]->changeDirection("right");
-		if (bullets[i]->x + bullets[i]->width > SCREEN_WIDTH)
-			bullets[i]->changeDirection("left");
-		if (bullets[i]->y < 0)
-			bullets[i]->changeDirection("down");
-		if (bullets[i]->y + bullets[i]->height > SCREEN_HEIGHT)
-			bullets[i]->changeDirection("up");
+		GameObject* curBullet = bullets[i];
+		float curRadius = curBullet->getRadius();
+		curBullet->update(deltaTime);
+		if (curBullet->x - curRadius< 0)
+			curBullet->changeDirection("right");
+		if (curBullet->x + curRadius > SCREEN_WIDTH)
+			curBullet->changeDirection("left");
+		if (curBullet->y - curRadius < 0)
+			curBullet->changeDirection("down");
+		if (curBullet->y + curRadius > SCREEN_HEIGHT)
+			curBullet->changeDirection("up");
 	}
 
 	for (int i = 0; i < blocks.size(); i++)
 	{
-		if (rectOverlap(*bullets[0], *blocks[i]))
+		for (int j = 0; j < bullets.size(); j++)
 		{
-			bullets[0]->collided(*blocks[i]);
-			bullets[0]->enterCollision();
-		}
-		else
-		{
-			bullets[0]->exitCollision();
+			if (rectCircOverlap(*blocks[i], *bullets[j]))
+			{
+				//bullets[j]->collided(*blocks[i]);
+				bullets[j]->enterCollision();
+			}
+			else
+			{
+				bullets[j]->exitCollision();
+			}
 		}
 	}
-
 	
 	// only used to display FPS.
 	if (show_fps)
@@ -170,6 +190,10 @@ void GameManager::draw()
 	{
 		bullets[i]->draw(window);
 	}
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->draw(window);
+	}
 
 	window.draw(text);
 
@@ -179,6 +203,22 @@ void GameManager::draw()
 void GameManager::addChild(GameObject* obj)
 {
 	objects.push_back(obj);
+	obj->Input = &Input;
+	obj->Game = this;
+	obj->postInit();
+}
+
+void GameManager::addBullet(GameObject* obj)
+{
+	bullets.push_back(obj);
+	obj->Input = &Input;
+	obj->Game = this;
+	obj->postInit();
+}
+
+void GameManager::addBlock(GameObject* obj)
+{
+	blocks.push_back(obj);
 	obj->Input = &Input;
 	obj->Game = this;
 	obj->postInit();

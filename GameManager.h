@@ -28,6 +28,7 @@ class GameManager
 		InputManager Input;
 		std::vector<GameObject*> blocks;
 		std::vector<GameObject*> bullets;
+		std::vector<GameObject*> objects;
 
 		float deltaTime = deltaClock.restart().asSeconds();
 		
@@ -37,8 +38,11 @@ class GameManager
 		~GameManager();
 
 		bool rectOverlap(GameObject& object1, GameObject& object2);
+		bool rectCircOverlap(GameObject& object1, GameObject& object2);
 		void gameLoop();
 		void addChild(GameObject* obj);
+		void addBullet(GameObject* obj);
+		void addBlock(GameObject* obj);
 
 	private:
 		void update();
